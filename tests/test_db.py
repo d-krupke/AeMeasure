@@ -50,3 +50,16 @@ class TestDb(unittest.TestCase):
         db2 = Database(path)
         self.assertListEqual(db2.load(), [entry])
         self._clear_db(path)
+
+    def test_clear(self):
+        entry = {"entry": "test"}
+        path = "./test5"
+        db = self._prepare_db(path)
+        db.add(dict(entry))
+        db.flush()
+        self.assertListEqual(db.load(), [entry])
+        db.clear()
+        self.assertListEqual(db.load(), [])
+        db2 = self._prepare_db(path)
+        self.assertListEqual(db2.load(), [])
+        self._clear_db(path)

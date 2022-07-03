@@ -92,5 +92,23 @@ class Database:
                     data.append(json.loads(entry))
         return data
 
+    def clear(self):
+        """
+        Clear database (cache and disk). Note that remaining data in the
+        cache of other nodes may still be written.
+        """
+        # cache
+        self._cache.clear()
+        # compressed
+        compr_path = os.path.join(self.path, "_compressed.zip")
+        if os.path.exists(compr_path):
+            os.remove(compr_path)
+        # remaining .data files
+        for fp in os.listdir(self.path):
+            path = os.path.join(self.path, fp)
+            if not os.path.isfile(path) or not str(path).endswith(".data"):
+                continue
+            os.remove(path)
+
     def __del__(self):
         self.flush()
