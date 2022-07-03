@@ -66,13 +66,15 @@ class Database:
             self._cache.clear()
 
     def load(self) -> typing.List[typing.Dict]:
-        data = []
+        data = list(self._cache)
         # load compressed data
-        with ZipFile(os.path.join(self.path, "_compressed.zip"), "r") as z:
-            for filename in z.filelist:
-                with z.open(filename, "r") as f:
-                    for line in f.readlines():
-                        data.append(json.loads(line))
+        compr_path = os.path.join(self.path, "_compressed.zip")
+        if os.path.exists(compr_path):
+            with ZipFile(compr_path, "r") as z:
+                for filename in z.filelist:
+                    with z.open(filename, "r") as f:
+                        for line in f.readlines():
+                            data.append(json.loads(line))
         # load uncompressed data
         for fp in os.listdir(self.path):
             path = os.path.join(self.path, fp)
