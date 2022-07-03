@@ -45,6 +45,7 @@ class TestDb(unittest.TestCase):
         db = self._prepare_db(path)
         db.add(dict(entry))
         db.flush()
+        db.compress()
         self.assertListEqual(db.load(), [entry])
         db2 = Database(path)
         self.assertListEqual(db2.load(), [entry])

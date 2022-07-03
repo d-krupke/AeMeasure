@@ -23,3 +23,4 @@ class TestPandas(unittest.TestCase):
         t = read_as_pandas_table(path)
         self.assertEqual(len(t), 2)
         self.assertTrue("test" in t.columns)
+        self._clear_db(path)
