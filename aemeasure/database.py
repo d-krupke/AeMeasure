@@ -69,7 +69,7 @@ class Database:
             return
         with open(os.path.join(self.path, self._subfile_path), "a") as f:
             for data in self._cache:
-                f.write(json.dumps(data)+"\n")
+                f.write(json.dumps(data) + "\n")
             self._cache.clear()
 
     def load(self) -> typing.List[typing.Dict]:
