@@ -1,4 +1,3 @@
-
 from .measurement import Measurement
 from .database import Database
 from .series import MeasurementSeries

@@ -6,8 +6,9 @@ import pandas as pd
 from aemeasure import Database
 
 
-def data_to_pandas(data: typing.List[typing.Dict],
-                   defaults: typing.Optional[typing.Dict] = None):
+def data_to_pandas(
+    data: typing.List[typing.Dict], defaults: typing.Optional[typing.Dict] = None
+):
     if not defaults:
         defaults = {}
     # find columns
@@ -26,8 +27,9 @@ def data_to_pandas(data: typing.List[typing.Dict],
     return pd.DataFrame(pd_data)
 
 
-def read_as_pandas_table(path: typing.Union[str, pathlib.Path],
-                         defaults: typing.Optional[typing.Dict] = None):
+def read_as_pandas_table(
+    path: typing.Union[str, pathlib.Path], defaults: typing.Optional[typing.Dict] = None
+):
     db = Database(path)
     data = db.load()
     return data_to_pandas(data, defaults)

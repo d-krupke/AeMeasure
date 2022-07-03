@@ -24,8 +24,8 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha"
     ],
-    python_requires='>=3.6',
-    install_requires=['pandas'],
+    python_requires=">=3.6",
+    install_requires=["pandas"],
 )

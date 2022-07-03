@@ -6,7 +6,6 @@ from aemeasure.database import Database
 
 
 class MeasurementSeries:
-
     def __init__(self, path: typing.Union[str, pathlib.Path], cache=True):
         self.db = Database(path)
         self.cache = cache
@@ -15,8 +14,7 @@ class MeasurementSeries:
         return Measurement(self.db, cache=self.cache, **kwargs)
 
     def __enter__(self):
-        pass
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.db.flush()
-

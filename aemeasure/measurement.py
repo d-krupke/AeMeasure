@@ -61,10 +61,13 @@ class Measurement(dict):
     def start_timer(self, name: str):
         self._timer[name] = datetime.datetime.now()
 
-    def __init__(self, db: Database,
-                 capture_stdout: typing.Optional[str] = None,
-                 capture_stderr: typing.Optional[str] = None,
-                 cache=False):
+    def __init__(
+        self,
+        db: Database,
+        capture_stdout: typing.Optional[str] = None,
+        capture_stderr: typing.Optional[str] = None,
+        cache=False,
+    ):
         super().__init__()
         self._time = datetime.datetime.now()
         self._db = db

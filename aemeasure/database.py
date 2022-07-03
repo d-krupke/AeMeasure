@@ -21,7 +21,8 @@ class Database:
             os.makedirs(path, exist_ok=True)
         if os.path.isfile(path):
             raise RuntimeError(
-                f"Cannot create database {path} because there exists an equally named file.")
+                f"Cannot create database {path} because there exists an equally named file."
+            )
         self._subfile_path = self._get_unique_name()
         self._cache = []
 
@@ -60,9 +61,11 @@ class Database:
         self.dump([entry], flush)
 
     def flush(self):
+        if not self._cache:
+            return
         with open(os.path.join(self.path, self._subfile_path), "a") as f:
             for data in self._cache:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data)+"\n")
             self._cache.clear()
 
     def load(self) -> typing.List[typing.Dict]:
