@@ -45,9 +45,13 @@ class Database:
         Warning: This may not be threadsafe! If you want to extract all data to
         a single file, just use 'read' and dump the output into a single json.
         """
-        with ZipFile(os.path.join(self.path, "_compressed.zip"), "a") as z:
+        compr_path = os.path.join(self.path, "_compressed.zip")
+        with ZipFile(compr_path, "a") as z:
             for fp in os.listdir(self.path):
-                z.write(os.path.join(self.path, fp), fp)
+                path = os.path.join(self.path, fp)
+                if not os.path.isfile(fp) or not path.endswith(".data"):
+                    continue
+                z.write(path, fp)
                 os.remove(os.path.join(self.path, fp))
 
     def dump(self, entries: typing.List[typing.Dict], flush=True):
