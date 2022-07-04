@@ -3,7 +3,7 @@ name: Publish to PyPI
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-n-publish:
@@ -20,11 +20,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Test with pytest
-        run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
       - name: Build and Publish
         run: python setup.py sdist
       - name: Publish
