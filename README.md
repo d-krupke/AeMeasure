@@ -16,6 +16,15 @@ and analyze their performance.  Here it is more important to save the context (p
 be precise to a millisecond. If you need very precise measurements, you need to look for a micro-benchmarking tool.
 This is a **macro-benchmarking tool** with a file-based.
 
+## Installation
+
+The easiest installation is via pip
+```shell
+pip install -U aemeasure
+```
+
+## Usage
+
 A simple application that runs an algorithm for a set of instances and saves the results to `./results` could look like this:
 
 ```python
