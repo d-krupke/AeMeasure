@@ -26,7 +26,11 @@ class TestDb(unittest.TestCase):
         db = self._prepare_db(path)
         db.add({"entry": "test"})
         db.flush()
+        dataf = [f for f in os.listdir(path) if str(f).endswith(".data")]
+        self.assertEqual(len(dataf), 1)
         db.compress()
+        dataf = [f for f in os.listdir(path) if str(f).endswith(".data")]
+        self.assertListEqual(dataf, [])
         self._clear_db(path)
 
     def test_load(self):
