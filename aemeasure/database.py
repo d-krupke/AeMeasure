@@ -47,12 +47,12 @@ class Database:
         """
         compr_path = os.path.join(self.path, "_compressed.zip")
         with ZipFile(compr_path, "a") as z:
-            for fp in os.listdir(self.path):
-                path = os.path.join(self.path, fp)
-                if not os.path.isfile(fp) or not path.endswith(".data"):
+            for file_name in os.listdir(self.path):
+                path = os.path.join(self.path, file_name)
+                if not os.path.isfile(path) or not path.endswith(".data"):
                     continue
-                z.write(path, fp)
-                os.remove(os.path.join(self.path, fp))
+                z.write(path, file_name)
+                os.remove(path)
 
     def dump(self, entries: typing.List[typing.Dict], flush=True):
         if isinstance(entries, dict):
