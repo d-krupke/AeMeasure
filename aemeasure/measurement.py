@@ -8,11 +8,10 @@ from .database import Database
 from .utils.capture import OutputCopy
 from .utils.git import get_git_revision
 
-git_revision = get_git_revision()
-
 
 class Measurement(dict):
     _measurement_stack = []
+    _git_revision = get_git_revision()
 
     @staticmethod
     def last() -> dict:
@@ -47,8 +46,8 @@ class Measurement(dict):
             return None
 
     def save_git_revision(self, key="git_revision") -> str:
-        self[key] = git_revision
-        return git_revision
+        self[key] = self._git_revision
+        return self._git_revision
 
     def save_metadata(self):
         self.save_seconds()
@@ -62,19 +61,24 @@ class Measurement(dict):
         self._timer[name] = datetime.datetime.now()
 
     def __init__(
-        self,
-        db: Database,
-        capture_stdout: typing.Optional[str] = None,
-        capture_stderr: typing.Optional[str] = None,
-        cache=False,
+            self,
+            db: typing.Union[Database, str],
+            capture_stdout: typing.Optional[str] = None,
+            capture_stderr: typing.Optional[str] = None,
+            save_metadata = False,
+            cache=False,
     ):
         super().__init__()
         self._time = datetime.datetime.now()
-        self._db = db
+        if isinstance(db, Database):
+            self._db = db
+        else:
+            self._db = Database(db)
         self._timer = dict()
         self._capture_stdout = capture_stdout
         self._capture_stderr = capture_stderr
         self._cache = cache
+        self._save_metadata = save_metadata
 
     def __enter__(self):
         self._measurement_stack.append(self)
@@ -83,6 +87,8 @@ class Measurement(dict):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop_capture()
+        if self._save_metadata:
+            self.save_metadata()
         if not exc_type:
             self.write()
         else:
