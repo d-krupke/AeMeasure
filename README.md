@@ -16,13 +16,16 @@ and analyze their performance.  Here it is more important to save the context (p
 be precise to a millisecond. If you need very precise measurements, you need to look for a micro-benchmarking tool.
 This is a **macro-benchmarking tool** with a file-based.
 
+## Usage
+
 A simple application that runs an algorithm for a set of instances and saves the results to `./results` could look like this:
 
 ```python
 from aemeasure import MeasurementSeries
 
-# cache=True will only write the results at the end.
-with MeasurementSeries("./results", cache=True) as ms:
+with MeasurementSeries("./results") as ms:
+    # By default, stdout, stdin, and metadata (git revision, hostname, etc) will
+    # automatically be added to each measurement.
     for instance in instances:
         with ms.measurement() as m:
             m["instance"] = str(instance)
@@ -30,10 +33,9 @@ with MeasurementSeries("./results", cache=True) as ms:
             m["algorithm"] = "fancy_algorithm"
             m["parameters"] = "asdgfdfgsdgf"
             solution = run_algorithm(instance)
-            m["solution"] = solution.to_json_dict()
+            m["solution"] = solution.as_json()
             m["objective"] = 42
             m["lower_bound"] = 13
-            m.save_metadata()
 ```
 
 You can then parse the database as pandas table via
