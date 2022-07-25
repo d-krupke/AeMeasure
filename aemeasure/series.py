@@ -11,8 +11,8 @@ class MeasurementSeries:
     """
 
     def __init__(self, db: typing.Union[Database, str, pathlib.Path],
-                 stdout: typing.Optional[str] = "stdin",
-                 stderr: typing.Optional[str] = "stdou",
+                 stdout: typing.Optional[str] = "stdout",
+                 stderr: typing.Optional[str] = "stderr",
                  metadata: bool = True,
                  cache: bool = True):
         """
