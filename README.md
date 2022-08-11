@@ -176,3 +176,7 @@ The primary points of the database are:
 * As the nativ JSON format can need a signficant amount of disk, a compression option allows to significantly reduce the size via ZIP-compression.
 
 **This database is made for frequent writing, infrequent reading. Currently, there are no query options aside of list comprehensions. Use `clear` and `dump` for selective deletion.**
+
+## Changelog
+
+* For some reason, the default keys for 'stdin' and 'stdout' were wrong. Fixed.
