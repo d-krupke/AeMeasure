@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import os.path
 import pathlib
 import random
@@ -7,6 +8,8 @@ import socket
 import typing
 import zipfile
 from zipfile import ZipFile
+
+_log = logging.getLogger("AeMeasure")
 
 
 class Database:
@@ -20,6 +23,7 @@ class Database:
         if not os.path.exists(path):
             # Could fail in very few unlucky cases on an NFS (parallel creations)
             os.makedirs(path, exist_ok=True)
+            _log.info(f"Created new database '{path}'.")
         if os.path.isfile(path):
             raise RuntimeError(
                 f"Cannot create database {path} because there exists an equally named file."
@@ -53,8 +57,12 @@ class Database:
                 path = os.path.join(self.path, file_name)
                 if not os.path.isfile(path) or not path.endswith(".data"):
                     continue
+                if os.path.getsize(path) <= 0:
+                    _log.warning(f"Skipping '{path}' due to zero size.")
+                _log.info(f"Compressing '{file_name}' of size {os.path.getsize(path)}.")
                 z.write(path, file_name)
                 os.remove(path)
+        _log.info(f"Compressed database has size {os.path.getsize(compr_path)}.")
 
     def dump(self, entries: typing.List[typing.Dict], flush=True):
         if isinstance(entries, dict):
@@ -72,6 +80,7 @@ class Database:
         with open(os.path.join(self.path, self._subfile_path), "a") as f:
             for data in self._cache:
                 f.write(json.dumps(data) + "\n")
+            _log.info(f"Wrote {len(self._cache)} entries to disk.")
             self._cache.clear()
 
     def load(self) -> typing.List[typing.Dict]:

@@ -179,5 +179,6 @@ The primary points of the database are:
 
 ## Changelog
 
-* 0.2.2: Setting LZMA as compression standard.
+* 0.2.4: Added some logging.
+* 0.2.3: Setting LZMA as compression standard.
 * For some reason, the default keys for 'stdin' and 'stdout' were wrong. Fixed.
