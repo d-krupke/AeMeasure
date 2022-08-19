@@ -5,6 +5,7 @@ import pathlib
 import random
 import socket
 import typing
+import zipfile
 from zipfile import ZipFile
 
 
@@ -40,13 +41,14 @@ class Database:
             return self._get_unique_name(__tries=__tries - 1)
         return name
 
-    def compress(self):
+    def compress(self, compression=zipfile.ZIP_LZMA, compresslevel=None):
         """
         Warning: This may not be threadsafe! If you want to extract all data to
         a single file, just use 'read' and dump the output into a single json.
         """
         compr_path = os.path.join(self.path, "_compressed.zip")
-        with ZipFile(compr_path, "a") as z:
+        with ZipFile(compr_path, "a", compression=compression,
+                     compresslevel=compresslevel) as z:
             for file_name in os.listdir(self.path):
                 path = os.path.join(self.path, file_name)
                 if not os.path.isfile(path) or not path.endswith(".data"):

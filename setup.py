@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="aemeasure",
-    version="0.2.2",
+    version="0.2.3",
     author="TU Braunschweig, IBR, Algorithms Group (Dominik Krupke)",
     author_email="krupke@ibr.cs.tu-bs.de",
     description="Simple tools for logging experiments in algorithm engineering",
