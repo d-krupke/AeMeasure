@@ -59,6 +59,7 @@ class Database:
                     continue
                 if os.path.getsize(path) <= 0:
                     _log.warning(f"Skipping '{path}' due to zero size.")
+                    continue
                 _log.info(f"Compressing '{file_name}' of size {os.path.getsize(path)}.")
                 z.write(path, file_name)
                 os.remove(path)
