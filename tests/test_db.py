@@ -67,3 +67,24 @@ class TestDb(unittest.TestCase):
         db2 = self._prepare_db(path)
         self.assertListEqual(db2.load(), [])
         self._clear_db(path)
+
+
+    def test_complex(self):
+        class Complex:
+            def __init__(self, i):
+                self.i = i
+
+            def __str__(self):
+                return "COMPLEX"
+
+            def __hash__(self):
+                return self.i
+        entry = {"complex": Complex(1)}
+        path = "test_complex"
+        db = self._prepare_db(path)
+        db.add(entry)
+        db.add(Complex(3))
+        db.add({Complex(1): Complex(2), Complex(4): Complex(4)})
+        db.flush()
+        self.assertEqual(len(db.load()), 3)
+

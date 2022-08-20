@@ -11,6 +11,36 @@ from zipfile import ZipFile
 
 _log = logging.getLogger("AeMeasure")
 
+def is_json_serializable(o: typing.Any)->bool:
+    if o is None:
+        return True
+    if isinstance(o, float):
+        return True
+    if isinstance(o, int):
+        return True
+    if isinstance(o, bool):
+        return True
+    if isinstance(o, str):
+        return True
+    if isinstance(o, dict):
+        return all(is_json_serializable(k) and is_json_serializable(v) for k, v in o.items())
+    if isinstance(o, list):
+        return all(is_json_serializable(e) for e in o)
+    if isinstance(o, tuple):
+        return all(is_json_serializable(e) for e in o)
+    return False
+
+def make_json_serializable(o: typing.Any):
+    if is_json_serializable(o):
+        return o
+    if isinstance(o, dict):
+        return {make_json_serializable(k): make_json_serializable(v) for k, v in o.items()}
+    if isinstance(o, list):
+        return [make_json_serializable(e) for e in o]
+    if isinstance(o, tuple):
+        return [make_json_serializable(e) for e in o]
+    _log.error(f"Object {o} is not JSON-serializable.")
+    return str(o)
 
 class Database:
     """
@@ -82,6 +112,7 @@ class Database:
         path = os.path.join(self.path, self._subfile_path)
         with open(path, "a") as f:
             for data in self._cache:
+                data = make_json_serializable(data)
                 f.write(json.dumps(data) + "\n")
             _log.info(f"Wrote {len(self._cache)} entries to disk.")
         if os.path.getsize(path) <= 0:
