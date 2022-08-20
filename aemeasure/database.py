@@ -68,6 +68,7 @@ class Database:
     def dump(self, entries: typing.List[typing.Dict], flush=True):
         if isinstance(entries, dict):
             raise ValueError("Use 'add' to dump a single dictionary.")
+        _log.info(f"Adding {len(entries)} items to database.")
         self._cache += entries
         if flush:
             self.flush()
@@ -78,11 +79,16 @@ class Database:
     def flush(self):
         if not self._cache:
             return
-        with open(os.path.join(self.path, self._subfile_path), "a") as f:
+        path = os.path.join(self.path, self._subfile_path)
+        with open(path, "a") as f:
             for data in self._cache:
                 f.write(json.dumps(data) + "\n")
             _log.info(f"Wrote {len(self._cache)} entries to disk.")
-            self._cache.clear()
+        if os.path.getsize(path) <= 0:
+            raise RuntimeError("Could not write to disk. Resulting file has zero size.")
+        if not os.path.isfile(path):
+            raise RuntimeError("Could not write to disk for unknown reasons.")
+        self._cache.clear()
 
     def load(self) -> typing.List[typing.Dict]:
         data = list(self._cache)

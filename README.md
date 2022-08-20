@@ -179,6 +179,7 @@ The primary points of the database are:
 
 ## Changelog
 
+* 0.2.6: Extended logging and exception if data could not be written.
 * 0.2.5: Skipping on zero size (probably not yet written, can be a problem with NFS)
 * 0.2.4: Added some logging.
 * 0.2.3: Setting LZMA as compression standard.

@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import socket
 import sys
@@ -92,7 +93,7 @@ class Measurement(dict):
         if not exc_type:
             self.write()
         else:
-            print("Do not save measurement due to exception.")
+            logging.getLogger("AeMeasure").warning("Do not save measurement due to exception.")
         e = self._measurement_stack.pop()
         assert e is self
 
