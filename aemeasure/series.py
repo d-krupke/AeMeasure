@@ -1,3 +1,4 @@
+import logging
 import pathlib
 import typing
 
@@ -56,4 +57,5 @@ class MeasurementSeries:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        logging.getLogger("AeMeasure").info("Saving series.")
         self.db.flush()
