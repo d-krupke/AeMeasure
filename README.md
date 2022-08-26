@@ -192,6 +192,7 @@ The primary points of the database are:
 
 ## Changelog
 
+* 0.2.8: Tiny improvements for robustness and additional testing.
 * 0.2.7: Robust JSON serialization. It will save the data but print an error if the data is not JSON-serializable.
 * 0.2.6: Extended logging and exception if data could not be written.
 * 0.2.5: Skipping on zero size (probably not yet written, can be a problem with NFS)
