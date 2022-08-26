@@ -25,7 +25,7 @@ requirements every few weeks, you may be better off with
 using a proper database. If you are somewhere in between, you could take a look at, e.g.,
 [MongoDB](https://www.mongodb.com/), which is more flexible regarding the schema but
 still provides a proper database. If you want a very simple&flexible solution and the data
-in the repository (compromised of course, but still human-readable),
+in the repository (compressed of course, but still human-readable),
 AeMeasure may be the right tool for you.
 
 ## Installation
