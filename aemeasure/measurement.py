@@ -7,12 +7,14 @@ import typing
 
 from .database import Database
 from .utils.capture import OutputCopy
+from .utils.env import get_environment
 from .utils.git import get_git_revision
 
 
 class Measurement(dict):
     _measurement_stack = []
     _git_revision = get_git_revision()
+    _python_env = get_environment()
 
     @staticmethod
     def last() -> dict:
@@ -50,12 +52,17 @@ class Measurement(dict):
         self[key] = self._git_revision
         return self._git_revision
 
+    def save_environment(self, key="python_env") -> list:
+        self[key] = self._python_env
+        return self._python_env
+
     def save_metadata(self):
         self.save_seconds()
         self.save_timestamp()
         self.save_hostname()
         self.save_argv()
         self.save_git_revision()
+        self.save_environment()
         self.save_cwd()
 
     def start_timer(self, name: str):

@@ -2,7 +2,7 @@ import os
 import shutil
 import unittest
 
-from aemeasure import Database, MeasurementSeries
+from aemeasure import Database, MeasurementSeries, read_as_pandas_table
 
 
 class SeriesTest(unittest.TestCase):
@@ -23,6 +23,7 @@ class SeriesTest(unittest.TestCase):
         db = Database("./test_db")
         self.assertEqual(len(db.load()), 1)
         self.assertEqual(db.load()[0]["test"], 1)
+        print(read_as_pandas_table("./test_db").iloc[0])
         self._clear_db("./test_db")
 
     def test_2(self):
