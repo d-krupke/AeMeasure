@@ -58,4 +58,8 @@ class MeasurementSeries:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         logging.getLogger("AeMeasure").info("Saving series.")
+        if exc_type is not None:
+            logging.getLogger("AeMeasure").error(
+                "An exception occurred during the series.")
         self.db.flush()
+        return False  # Do not suppress exceptions

@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="aemeasure",
-    version="0.2.7",
+    version="0.2.8",
     author="TU Braunschweig, IBR, Algorithms Group (Dominik Krupke)",
     author_email="krupke@ibr.cs.tu-bs.de",
     description="Simple tools for logging experiments in algorithm engineering",
@@ -26,6 +26,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Development Status :: 3 - Alpha",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=["pandas"],
 )

@@ -7,12 +7,14 @@ import typing
 
 from .database import Database
 from .utils.capture import OutputCopy
+from .utils.env import get_environment
 from .utils.git import get_git_revision
 
 
 class Measurement(dict):
     _measurement_stack = []
     _git_revision = get_git_revision()
+    _python_env = get_environment()
 
     @staticmethod
     def last() -> dict:
@@ -50,12 +52,17 @@ class Measurement(dict):
         self[key] = self._git_revision
         return self._git_revision
 
+    def save_environment(self, key="python_env") -> list:
+        self[key] = self._python_env
+        return self._python_env
+
     def save_metadata(self):
         self.save_seconds()
         self.save_timestamp()
         self.save_hostname()
         self.save_argv()
         self.save_git_revision()
+        self.save_environment()
         self.save_cwd()
 
     def start_timer(self, name: str):
@@ -87,15 +94,17 @@ class Measurement(dict):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.stop_capture()
-        if self._save_metadata:
-            self.save_metadata()
         if not exc_type:
+            self.stop_capture()
+            if self._save_metadata:
+                self.save_metadata()
             self.write()
         else:
+            self.stop_capture(discard=True)
             logging.getLogger("AeMeasure").warning("Do not save measurement due to exception.")
         e = self._measurement_stack.pop()
         assert e is self
+        return False  # do not suppress exception.
 
     def save_cwd(self, label="cwd"):
         self[label] = os.getcwd()
@@ -106,12 +115,14 @@ class Measurement(dict):
         if self._capture_stderr:
             sys.stderr = OutputCopy(sys.stderr)
 
-    def stop_capture(self):
+    def stop_capture(self, discard=False):
         if self._capture_stdout:
-            self[self._capture_stdout] = sys.stdout.getvalue()
+            if not discard:
+                self[str(self._capture_stdout)] = sys.stdout.getvalue()
             sys.stdout = sys.stdout.wrapped_stream
         if self._capture_stderr:
-            self[self._capture_stderr] = sys.stderr.getvalue()
+            if not discard:
+                self[str(self._capture_stderr)] = sys.stderr.getvalue()
             sys.stderr = sys.stderr.wrapped_stream
 
     def write(self):

@@ -14,7 +14,19 @@ You can also consider this tool as a simple serverless but NFS-compatible object
 The motivation for this tool came from the need to **quickly compare different optimization models (MIP, CP, SAT, ...)**
 and analyze their performance.  Here it is more important to save the context (parameters, revision,...) than to
 be precise to a millisecond. If you need very precise measurements, you need to look for a micro-benchmarking tool.
-This is a **macro-benchmarking tool** with a file-based.
+This is a **macro-benchmarking tool** with a **file-based database**.
+
+## When to use AeMeasure?
+
+> *"They say the workman is only as good as his tools; in experimental algorithmics the workman must often build his tools."* - Catherine McGeoch, A Guide to Experimental Algorithmics
+
+AeMeasure is designed for flexibility and simplicity. If you don't have changing
+requirements every few weeks, you may be better off with
+using a proper database. If you are somewhere in between, you could take a look at, e.g.,
+[MongoDB](https://www.mongodb.com/), which is more flexible regarding the schema but
+still provides a proper database. If you want a very simple&flexible solution and the data
+in the repository (compressed of course, but still human-readable),
+AeMeasure may be the right tool for you.
 
 ## Installation
 
@@ -107,6 +119,7 @@ def run_for_instance(instance_name, timelimit):
             with ms.measurement() as m:
                 ub, lb = model.optimize(timelimit)
                 m["instance"] = instance_name
+                m["timelimit"] = timelimit
                 m["ub"] = ub
                 m["lb"] = lb
                 m["n"] = len(instance)
@@ -179,6 +192,7 @@ The primary points of the database are:
 
 ## Changelog
 
+* 0.2.8: Saving Python-environment, too.
 * 0.2.7: Robust JSON serialization. It will save the data but print an error if the data is not JSON-serializable.
 * 0.2.6: Extended logging and exception if data could not be written.
 * 0.2.5: Skipping on zero size (probably not yet written, can be a problem with NFS)
