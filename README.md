@@ -1,5 +1,7 @@
 # AeMeasure - A macro-benchmarking tool with a serverless database
 
+**Consider [AlgBench](https://github.com/d-krupke/AlgBench) as a more modern alternative to AeMeasure. It requires less boilerplate code, has a better documentation, and direct support for logging.**
+
 This module has been developed to save (macro-)benchmarks of algorithms in a simple and
 dynamic way. The primary features are:
 * Saving metadata such as Git-Revision, hostname, etc.
